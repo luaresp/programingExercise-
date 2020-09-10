@@ -47,7 +47,7 @@ public class Course implements Serializable {
 	@JsonProperty("code")
 	private String name;
 	
-	@Column(name = "code", nullable = false, updatable = true)
+	@Column(name = "code", nullable = false, updatable = true, length = 4)
 	@JsonProperty("name")
 	private String code;
 

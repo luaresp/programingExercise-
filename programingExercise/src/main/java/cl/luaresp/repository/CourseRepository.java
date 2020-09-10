@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 import cl.luaresp.model.Course;
 
 /**
- * JPA para tabla Course
+ * JPA Repository for table Course
  * 
  * @author luaresp
  *

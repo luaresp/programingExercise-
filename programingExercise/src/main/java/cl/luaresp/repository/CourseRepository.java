@@ -1,14 +1,26 @@
 package cl.luaresp.repository;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import cl.luaresp.model.Course;
 
-public interface CourseRepository {
+/**
+ * JPA para tabla Course
+ * 
+ * @author luaresp
+ *
+ */
+public interface CourseRepository extends JpaRepository<Course, Long> {
 
-	@Query(value = "select c.name, c.code from Course c ")
-	List<Course> findAllPage();
+	@Query(value = "select new cl.luaresp.model.Course(c.id, c.code, c.name) from Course c")
+	Page<Course> findAllPage(Pageable pageable);
+	
+	@Query("select new cl.luaresp.model.Course(c.id, c.code, c.name) from Course c where c.code = :code")
+	Slice<Course> findByCode(@Param("code") String code);
 
 }

@@ -2,7 +2,6 @@ package cl.luaresp.controller;
 
 import java.util.Optional;
 
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 
@@ -18,13 +17,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import cl.luaresp.exception.BadRequestException;
@@ -73,13 +70,13 @@ public class CourseController {
 	 * @throws BadRequestException
 	 */
 	@GetMapping(value = "/courses/{code}")
-	public ResponseEntity<Optional<Course>> getCoursesById(
-			@Valid @PathVariable("code") @Pattern(regexp = "^[A-Za-z0-9\\-_]{1,4}$") String code) {
+	public ResponseEntity<Optional<Course>> getCoursesByCode(
+			@Valid @PathVariable("code") @Pattern(regexp = "^[A-Za-z0-9\\\\-_]{1,4}$") String code) {
 
 		Optional<Course> result = courseRepo.findById(code);
 
 		if (result.isEmpty())
-			throw new NotFoundException("code: " + code + " no encontrado ");
+			throw new NotFoundException("code: " + code + " not found ");
 
 		return new ResponseEntity<>(result, HttpStatus.OK);
 
@@ -99,7 +96,7 @@ public class CourseController {
 
 	@PutMapping(value = "/courses/{code}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE, headers = "Accept=application/json")
 	public ResponseEntity<String> updateCourse(
-			@Valid @PathVariable("code") @Pattern(regexp = "^[A-Za-z0-9\\-_]{1,4}$") String code,
+			@Valid @PathVariable("code") @Pattern(regexp = "^[A-Za-z0-9\\\\-_]{1,4}$") String code,
 			@Valid @RequestBody Course course) {
 
 		Optional<Course> result = courseRepo.findById(code);
@@ -115,7 +112,8 @@ public class CourseController {
 	}
 
 	@DeleteMapping(value = "/courses/{code}", headers = "Accept=application/json")
-	public ResponseEntity<String> deleteCourse(@Valid @PathVariable("code") String code) {
+	public ResponseEntity<String> deleteCourse(
+			@Valid @PathVariable("code") @Pattern(regexp = "^[A-Za-z0-9\\\\-_]{1,4}$") String code) {
 
 		Optional<Course> result = courseRepo.findById(code);
 
@@ -124,13 +122,6 @@ public class CourseController {
 
 		courseRepo.deleteById(code);
 		return new ResponseEntity<>(HttpStatus.OK);
-	}
-
-	@ExceptionHandler(ConstraintViolationException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException e) {
-
-		return new ResponseEntity<>("not valid due to validation error: " + e.getMessage(), HttpStatus.BAD_REQUEST);
 	}
 
 }

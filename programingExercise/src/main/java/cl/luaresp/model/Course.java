@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -37,18 +38,21 @@ public class Course implements Serializable {
 
 	private static final long serialVersionUID = -4666512945211715570L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false, updatable = false, unique = true)
 	@JsonProperty("id")
 	private long id;
 
-	@Column(name = "name", nullable = false, updatable = true)
-	@JsonProperty("code")
+	@Column(name = "name", nullable = false, updatable = true, length = 40)
+	@JsonProperty("name")
+	@Size(message = "name: size not permit", min = 1, max = 40)
 	private String name;
 	
+	@Id
 	@Column(name = "code", nullable = false, updatable = true, length = 4)
-	@JsonProperty("name")
+	@JsonProperty("code")
+	@Size(message = "code: size not permit", min = 1, max = 4)
 	private String code;
 
 	public long getId() {

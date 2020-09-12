@@ -7,9 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -18,37 +18,22 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "Course")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-"id",
-"code",
-"name"
-})
+@JsonPropertyOrder({ "id", "code", "name" })
 public class Course implements Serializable {
-
-	public Course() {}
-	
-	public Course(long id, String name, String code) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.code = code;
-	}
 
 	private static final long serialVersionUID = -4666512945211715570L;
 
-	
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false, updatable = false, unique = true)
-	@JsonProperty("id")
+	@JsonIgnore
 	private long id;
 
 	@Column(name = "name", nullable = false, updatable = true, length = 40)
 	@JsonProperty("name")
 	@Size(message = "name: size not permit", min = 1, max = 40)
 	private String name;
-	
+
 	@Id
 	@Column(name = "code", nullable = false, updatable = true, length = 4)
 	@JsonProperty("code")

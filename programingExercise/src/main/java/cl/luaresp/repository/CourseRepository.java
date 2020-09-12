@@ -1,6 +1,7 @@
 package cl.luaresp.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import cl.luaresp.model.Course;
 
@@ -10,6 +11,7 @@ import cl.luaresp.model.Course;
  * @author luaresp
  *
  */
+@Repository
 public interface CourseRepository extends JpaRepository<Course, String> {
 
 }

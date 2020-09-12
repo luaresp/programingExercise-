@@ -83,21 +83,21 @@ public class StudentControllerTest {
 		String actualResponseBody = mvcResult.getResponse().getContentAsString();
 		JwtResponse response = mapper.readValue(actualResponseBody, JwtResponse.class);
 		String token = response.getJwttoken();
-		
+
 		Course course = new Course();
 		course.setCode("MA10");
-		
+
 		Student stud = new Student();
 		stud.setRut("99999999-9");
 		stud.setName("Alejandro");
 		stud.setLastName("Esparza");
 		stud.setAge(18);
 		stud.setCourse(course);
-		
+
 		mockMvc.perform(MockMvcRequestBuilders.post("/students").accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON_VALUE).header("Authorization", "Bearer " + token)
 				.content(mapper.writeValueAsString(stud))).andExpect(status().isCreated());
-		
+
 		stud = new Student();
 		stud.setRut("77777777-7");
 		stud.setName("Alejandro");
@@ -107,7 +107,7 @@ public class StudentControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.post("/students").accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON_VALUE).header("Authorization", "Bearer " + token)
 				.content(mapper.writeValueAsString(stud))).andExpect(status().isBadRequest());
-		
+
 		stud = new Student();
 		stud.setRut("9999");
 		stud.setName("Alejandro");
@@ -117,7 +117,7 @@ public class StudentControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.post("/students").accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON_VALUE).header("Authorization", "Bearer " + token)
 				.content(mapper.writeValueAsString(stud))).andExpect(status().isBadRequest());
-		
+
 		stud = new Student();
 		stud.setRut("77777777-7");
 		stud.setLastName("Esparza");
@@ -126,10 +126,10 @@ public class StudentControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.post("/students").accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON_VALUE).header("Authorization", "Bearer " + token)
 				.content(mapper.writeValueAsString(stud))).andExpect(status().isBadRequest());
-		
+
 		course = new Course();
 		course.setCode("PP01");
-		
+
 		stud = new Student();
 		stud.setRut("77777777-7");
 		stud.setName("Alejandro");
@@ -140,5 +140,81 @@ public class StudentControllerTest {
 				.contentType(MediaType.APPLICATION_JSON_VALUE).header("Authorization", "Bearer " + token)
 				.content(mapper.writeValueAsString(stud))).andExpect(status().isNotFound());
 	}
+
+	@Test
+	public void updateStudents() throws Exception {
+
+		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/token").accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON_VALUE)).andExpect(status().isOk()).andReturn();
+
+		String actualResponseBody = mvcResult.getResponse().getContentAsString();
+		JwtResponse response = mapper.readValue(actualResponseBody, JwtResponse.class);
+		String token = response.getJwttoken();
+		
+		Course course = new Course();
+		course.setCode("MA10");
+
+		Student stud = new Student();
+		stud.setRut("55555555-5");
+		stud.setName("Alejandro");
+		stud.setLastName("Esparza");
+		stud.setAge(18);
+		stud.setCourse(course);
+
+		mockMvc.perform(MockMvcRequestBuilders.put("/students/{rut}", "55555555-5").accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON_VALUE).header("Authorization", "Bearer " + token)
+				.content(mapper.writeValueAsString(stud))).andExpect(status().isOk());
+		
+		stud = new Student();
+		stud.setRut("22222222-2");
+		stud.setName("Alejandro");
+		stud.setLastName("Esparza");
+		stud.setAge(18);
+		stud.setCourse(course);
+
+		mockMvc.perform(MockMvcRequestBuilders.put("/students/{rut}", "22222222-2").accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON_VALUE).header("Authorization", "Bearer " + token)
+				.content(mapper.writeValueAsString(stud))).andExpect(status().isNotFound());
+		
+		course = new Course();
+		course.setCode("PP10");
+		
+		stud = new Student();
+		stud.setRut("55555555-5");
+		stud.setName("Alejandro");
+		stud.setLastName("Esparza");
+		stud.setAge(18);
+		stud.setCourse(course);
+		
+		mockMvc.perform(MockMvcRequestBuilders.put("/students/{rut}", "55555555-5").accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON_VALUE).header("Authorization", "Bearer " + token)
+				.content(mapper.writeValueAsString(stud))).andExpect(status().isNotFound());
+		
+		course = new Course();
+		course.setCode("MA10");
+		
+		stud = new Student();
+		stud.setRut("55555555-5");
+		stud.setName("Alejandro");
+		stud.setLastName("Esparza");
+		stud.setAge(15);
+		stud.setCourse(course);
+		
+		mockMvc.perform(MockMvcRequestBuilders.put("/students/{rut}", "55555555-5").accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON_VALUE).header("Authorization", "Bearer " + token)
+				.content(mapper.writeValueAsString(stud))).andExpect(status().isBadRequest());
+		
+		stud = new Student();
+		stud.setRut("55555555-5");
+		stud.setName("Alejandro");
+		stud.setAge(19);
+		stud.setCourse(course);
+		mockMvc.perform(MockMvcRequestBuilders.put("/students/{rut}", "55555555-5").accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON_VALUE).header("Authorization", "Bearer " + token)
+				.content(mapper.writeValueAsString(stud))).andExpect(status().isBadRequest());
+
+	}
+	
+	
 
 }

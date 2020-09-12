@@ -36,11 +36,13 @@ import cl.luaresp.repository.StudentRepository;
 @Validated
 public class StudentController {
 
-	@Autowired
+	@Autowired(required = true)
 	private StudentRepository studentRepo;
 	
-	@Autowired
+	@Autowired(required = true)
 	private CourseRepository courseRepo;
+	
+	private final String expRexRUT  = "^([0-9]{1,3}((\\\\\\\\.[0-9]{1,3}){2}|([0-9]{1,3}){2})-[0-9kK])$";
 
 	@GetMapping(value = "/students", produces = MediaType.APPLICATION_JSON_VALUE, headers = "Accept=application/json")
 	public ResponseEntity<Page<Student>> getAllStudents(
@@ -58,7 +60,7 @@ public class StudentController {
 
 	@GetMapping(value = "/students/{rut}")
 	public ResponseEntity<Optional<Student>> getStudentByRut(
-			@Valid @PathVariable("rut") @Pattern(regexp = "^([0-9]{1,3}((\\\\.[0-9]{1,3}){2}|([0-9]{1,3}){2})-[0-9kK])$") String rut) {
+			@Valid @PathVariable("rut") @Pattern(regexp = expRexRUT) String rut) {
 
 		Optional<Student> result = studentRepo.findById(rut);
 
@@ -84,12 +86,12 @@ public class StudentController {
 
 		student.setCourse(course.get());
 		studentRepo.save(student);
-		return new ResponseEntity<>(HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
 	@PutMapping(value = "/students/{rut}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE, headers = "Accept=application/json")
 	public ResponseEntity<String> updateStudent(
-			@Valid @PathVariable("rut") @Pattern(regexp = "^([0-9]{1,3}((\\\\.[0-9]{1,3}){2}|([0-9]{1,3}){2})-[0-9kK])$") String rut,
+			@Valid @PathVariable("rut") @Pattern(regexp = expRexRUT) String rut,
 			@Valid @RequestBody Student student) {
 
 		Optional<Student> result = studentRepo.findById(rut);
@@ -114,7 +116,7 @@ public class StudentController {
 	
 	@DeleteMapping(value = "/students/{rut}", headers = "Accept=application/json")
 	public ResponseEntity<String> deleteCourse(
-			@Valid @PathVariable("rut") @Pattern(regexp = "^([0-9]{1,3}((\\\\.[0-9]{1,3}){2}|([0-9]{1,3}){2})-[0-9kK])$") String rut) {
+			@Valid @PathVariable("rut") @Pattern(regexp = expRexRUT) String rut) {
 
 		Optional<Student> result = studentRepo.findById(rut);
 

@@ -104,6 +104,14 @@ public class Student implements Serializable {
 		this.age = age;
 	}
 
+	public Course getCourse() {
+		return course;
+	}
+
+	public void setCourse(Course course) {
+		this.course = course;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -121,14 +129,6 @@ public class Student implements Serializable {
 		builder.append(course);
 		builder.append("]");
 		return builder.toString();
-	}
-
-	public Course getCourse() {
-		return course;
-	}
-
-	public void setCourse(Course course) {
-		this.course = course;
 	}
 
 }

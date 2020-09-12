@@ -8,6 +8,12 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+/**
+ * Object to standardize the result of an exception
+ * 
+ * @author luaresp
+ *
+ */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "timestamp", "status", "error", "message", "path" })
 public class ApiException implements Serializable {

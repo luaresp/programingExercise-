@@ -1,0 +1,37 @@
+insert into Course (id, code, name) values (1, 'MA10', 'Matematicas 100');
+insert into Course (id, code, name) values (2, 'MA11', 'Matematicas 101');
+insert into Course (id, code, name) values (3, 'MA20', 'Matematicas 200');
+insert into Course (id, code, name) values (4, 'MA21', 'Matematicas 201');
+insert into Course (id, code, name) values (5, 'MA30', 'Matematicas 300');
+insert into Course (id, code, name) values (6, 'MA40', 'Matematicas 400');
+insert into Course (id, code, name) values (7, 'BI10', 'Biologia 100');
+insert into Course (id, code, name) values (8, 'BI11', 'Biologia 101');
+insert into Course (id, code, name) values (9, 'BI20', 'Biologia 200');
+insert into Course (id, code, name) values (10, 'BI21', 'Biologia 201');
+insert into Course (id, code, name) values (11, 'BI30', 'Biologia 300');
+insert into Course (id, code, name) values (12, 'BI40', 'Biologia 400');
+insert into Course (id, code, name) values (13, 'FI10', 'Fisica 100');
+insert into Course (id, code, name) values (14, 'FI11', 'Fisica 101');
+insert into Course (id, code, name) values (15, 'FI20', 'Fisica 200');
+insert into Course (id, code, name) values (16, 'FI21', 'Fisica 201');
+insert into Course (id, code, name) values (17, 'FI30', 'Fisica 300');
+insert into Course (id, code, name) values (18, 'FI40', 'Fisica 400');
+insert into Course (id, code, name) values (19, 'QU10', 'Quimica 100');
+insert into Course (id, code, name) values (20, 'QU11', 'Quimica 101');
+insert into Course (id, code, name) values (21, 'QU20', 'Quimica 200');
+insert into Course (id, code, name) values (22, 'QU21', 'Quimica 201');
+insert into Course (id, code, name) values (23, 'QU30', 'Quimica 300');
+insert into Course (id, code, name) values (24, 'QU40', 'Quimica 400');
+insert into Course (id, code, name) values (25, 'LI10', 'Literatura 100');
+insert into Course (id, code, name) values (26, 'LI11', 'Literatura 101');
+insert into Course (id, code, name) values (27, 'LI20', 'Literatura 200');
+insert into Course (id, code, name) values (28, 'LI21', 'Literatura 201');
+insert into Course (id, code, name) values (29, 'LI30', 'Literatura 300');
+insert into Course (id, code, name) values (30, 'LI40', 'Literatura 400');
+insert into Course (id, code, name) values (31, 'EL10', 'Electivo 1');
+
+
+insert into Student (id, rut, name, lastname, age, course_code) values (1, '15311845-0', 'Raul', 'Esparza', 38, 'EL10');
+--insert into Student (id, rut, name, lastname, age) values (1, '15311845-0', 'Raul', 'Esparza', 38);
+insert into Student (id, rut, name, lastname, age, course_code) values (2, '13882496-9', 'Maria Paz', 'Esparza', 40, 'MA10');
+insert into Student (id, rut, name, lastname, age, course_code) values (3, '13882495-0', 'Elizabeth', 'Esparza', 40, 'BI10');

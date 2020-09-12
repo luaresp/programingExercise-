@@ -17,12 +17,6 @@ import cl.luaresp.model.Course;
 import cl.luaresp.model.JwtRequest;
 import cl.luaresp.model.JwtResponse;
 
-//@ExtendWith(SpringExtension.class)
-//@DataJpaTest
-////@AutoConfigureTestDatabase
-////@WebMvcTest(controllers = CourseController.class)
-//@SpringBootTest
-
 @SpringBootTest
 @AutoConfigureMockMvc
 public class CourseControllerTest {

@@ -16,9 +16,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -75,13 +77,51 @@ public class StudentController {
 		if (!result.isEmpty())
 			throw new BadRequestException("rut: " + student.getRut() + " existe previamente");
 		
-		Course course = courseRepo.getOne(student.getCourse().getCode());
+		Optional<Course> course = courseRepo.findById(student.getCourse().getCode());
 		
-		if(course == null)
-			throw new NotFoundException("Course.code: " + student.getCourse().getCode() + " not found ");
+		if(course.isEmpty())
+			throw new NotFoundException("course.code: " + student.getCourse().getCode() + " not found ");
 
-		student.setCourse(course);
+		student.setCourse(course.get());
 		studentRepo.save(student);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@PutMapping(value = "/students/{rut}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE, headers = "Accept=application/json")
+	public ResponseEntity<String> updateStudent(
+			@Valid @PathVariable("rut") @Pattern(regexp = "^([0-9]{1,3}((\\\\.[0-9]{1,3}){2}|([0-9]{1,3}){2})-[0-9kK])$") String rut,
+			@Valid @RequestBody Student student) {
+
+		Optional<Student> result = studentRepo.findById(rut);
+
+		if (result.isEmpty())
+			throw new NotFoundException("rut: " + rut + " not found");
+
+		Optional<Course> course = courseRepo.findById(student.getCourse().getCode());
+		
+		if(course.isEmpty())
+			throw new NotFoundException("course.code: " + student.getCourse().getCode() + " not found ");
+		
+		Student stud = result.get();
+		stud.setName(student.getName());
+		stud.setLastName(student.getLastName());
+		stud.setAge(student.getAge());
+		stud.setCourse(course.get());
+
+		studentRepo.save(stud);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@DeleteMapping(value = "/students/{rut}", headers = "Accept=application/json")
+	public ResponseEntity<String> deleteCourse(
+			@Valid @PathVariable("rut") @Pattern(regexp = "^([0-9]{1,3}((\\\\.[0-9]{1,3}){2}|([0-9]{1,3}){2})-[0-9kK])$") String rut) {
+
+		Optional<Student> result = studentRepo.findById(rut);
+
+		if (result.isEmpty())
+			throw new NotFoundException("rut: " + rut + " not found");
+
+		studentRepo.deleteById(rut);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 

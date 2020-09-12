@@ -131,12 +131,4 @@ public class Student implements Serializable {
 		this.course = course;
 	}
 
-//	public Map<String, Course> getCourses() {
-//		return courses;
-//	}
-//
-//	public void setCourses(Map<String, Course> courses) {
-//		this.courses = courses;
-//	}
-
 }

@@ -1,15 +1,18 @@
 package cl.luaresp.controller;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import cl.luaresp.config.JwtTokenUtil;
@@ -43,7 +46,7 @@ public class JwtAuthenticationController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
+	@PostMapping(value = "/authenticate")
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
 
 		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
@@ -51,6 +54,14 @@ public class JwtAuthenticationController {
 		UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
 
 		JwtResponse result = jwtTokenUtil.generateToken(userDetails);
+
+		return ResponseEntity.ok(result);
+	}
+	
+	@GetMapping(value = "/token")
+	public ResponseEntity<?> createAuthenticationToken() throws Exception {
+
+		JwtResponse result = jwtTokenUtil.generateToken(new User("luaresp", "", new ArrayList<>()));
 
 		return ResponseEntity.ok(result);
 	}

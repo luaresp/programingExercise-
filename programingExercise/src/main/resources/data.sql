@@ -31,7 +31,6 @@ insert into Course (id, code, name) values (30, 'LI40', 'Literatura 400');
 insert into Course (id, code, name) values (31, 'EL10', 'Electivo 1');
 
 
-insert into Student (id, rut, name, lastname, age, course_code) values (1, '15311845-0', 'Raul', 'Esparza', 38, 'EL10');
---insert into Student (id, rut, name, lastname, age) values (1, '15311845-0', 'Raul', 'Esparza', 38);
-insert into Student (id, rut, name, lastname, age, course_code) values (2, '13882496-9', 'Maria Paz', 'Esparza', 40, 'MA10');
-insert into Student (id, rut, name, lastname, age, course_code) values (3, '13882495-0', 'Elizabeth', 'Esparza', 40, 'BI10');
+insert into Student (id, rut, name, lastname, age, course_code) values (1, '66666666-6', 'Raul', 'Esparza', 38, 'EL10');
+insert into Student (id, rut, name, lastname, age, course_code) values (2, '55555555-5', 'Maria Paz', 'Esparza', 40, 'MA10');
+insert into Student (id, rut, name, lastname, age, course_code) values (3, '44444444-4', 'Elizabeth', 'Esparza', 40, 'BI10');

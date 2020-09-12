@@ -40,7 +40,7 @@ import cl.luaresp.repository.CourseRepository;
  */
 public class CourseController {
 
-	@Autowired
+	@Autowired(required = true)
 	private CourseRepository courseRepo;
 
 	/**
@@ -91,7 +91,7 @@ public class CourseController {
 			throw new BadRequestException("code: " + course.getCode() + " existe previamente");
 
 		courseRepo.save(course);
-		return new ResponseEntity<>(HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 
 	@PutMapping(value = "/courses/{code}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE, headers = "Accept=application/json")

@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -38,6 +39,7 @@ public class Course implements Serializable {
 	@Column(name = "code", nullable = false, updatable = true, length = 4)
 	@JsonProperty("code")
 	@Size(message = "code: size not permit", min = 1, max = 4)
+	@Pattern(regexp = "^[A-Za-z0-9\\\\-_]{1,4}$")
 	private String code;
 
 	public long getId() {

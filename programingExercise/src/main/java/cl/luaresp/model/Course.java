@@ -7,8 +7,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
+import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -19,6 +22,7 @@ import lombok.Data;
 
 @Entity
 @Data
+@Validated
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "id", "code", "name" })
 public class Course implements Serializable {
@@ -31,13 +35,14 @@ public class Course implements Serializable {
 	private long id;
 
 	@Column(name = "name", nullable = false, updatable = true, length = 40)
-	@JsonProperty("name")
+	@JsonProperty(value = "name", defaultValue = "")
 	@Size(message = "name: size not permit", min = 1, max = 40)
 	private String name;
 
 	@Id
+	@NotNull
 	@Column(name = "code", nullable = false, updatable = true, length = 4)
-	@JsonProperty("code")
+	@JsonProperty(value = "code", required = true, defaultValue = "")
 	@Size(message = "code: size not permit", min = 1, max = 4)
 	@Pattern(regexp = "^[A-Za-z0-9\\\\-_]{1,4}$")
 	private String code;

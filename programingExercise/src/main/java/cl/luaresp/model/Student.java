@@ -10,10 +10,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
+import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -25,6 +27,7 @@ import lombok.Data;
 
 @Entity
 @Data
+@Validated
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "rut", "name", "lastName", "age", "course" })
 public class Student implements Serializable {
@@ -37,31 +40,35 @@ public class Student implements Serializable {
 	private Long id;
 
 	@Id
+	@NotNull
 	@Pattern(regexp = "^([0-9]{1,3}((\\.[0-9]{1,3}){2}|([0-9]{1,3}){2})-[0-9kK])$")
 	@Column(name = "rut", length = 11, nullable = false, unique = true)
-	@JsonProperty("rut")
+	@JsonProperty(value = "rut", required = true, defaultValue = "")
 	private String rut;
 
+	@NotNull
 	@Size(message = "name: size not permit", min = 1, max = 20)
 	@Column(name = "name", length = 20, nullable = false, unique = false)
-	@JsonProperty("name")
+	@JsonProperty(value = "name", required = true, defaultValue = "")
 	private String name;
 
+	@NotNull
 	@Size(message = "lastName: size not permit", min = 1, max = 20)
 	@Column(name = "lastname", length = 20, nullable = false, unique = false)
-	@JsonProperty("lastName")
+	@JsonProperty(value = "lastName", required = true, defaultValue = "")
 	private String lastName;
 
+	@NotNull
 	@Min(18)
-	@Max(99)
 	@Column(name = "age", nullable = false, unique = false)
-	@JsonProperty("age")
+	@JsonProperty(value = "age", required = true, defaultValue = "0")
 	private int age;
 
+	@NotNull
 	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "Course_code", referencedColumnName = "code")
-	@JsonProperty("course")
+	@JsonProperty(value = "course", required = true, defaultValue = "")
 	private Course course;
 
 	public Long getId() {

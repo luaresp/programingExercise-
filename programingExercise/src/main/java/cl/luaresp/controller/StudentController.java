@@ -30,6 +30,7 @@ import cl.luaresp.model.Course;
 import cl.luaresp.model.Student;
 import cl.luaresp.repository.CourseRepository;
 import cl.luaresp.repository.StudentRepository;
+import cl.luaresp.service.StudentService;
 
 @RestController
 @CrossOrigin
@@ -38,11 +39,14 @@ public class StudentController {
 
 	@Autowired(required = true)
 	private StudentRepository studentRepo;
-	
+
 	@Autowired(required = true)
 	private CourseRepository courseRepo;
-	
-	private final String expRexRUT  = "^([0-9]{1,3}((\\\\\\\\.[0-9]{1,3}){2}|([0-9]{1,3}){2})-[0-9kK])$";
+
+	@Autowired(required = true)
+	private StudentService studentServ;
+
+	private final String expRexRUT = "^([0-9]{1,3}((\\\\\\\\.[0-9]{1,3}){2}|([0-9]{1,3}){2})-[0-9kK])$";
 
 	@GetMapping(value = "/students", produces = MediaType.APPLICATION_JSON_VALUE, headers = "Accept=application/json")
 	public ResponseEntity<Page<Student>> getAllStudents(
@@ -62,6 +66,9 @@ public class StudentController {
 	public ResponseEntity<Optional<Student>> getStudentByRut(
 			@Valid @PathVariable("rut") @Pattern(regexp = expRexRUT) String rut) {
 
+		if (!studentServ.validaModulo11(rut))
+			throw new BadRequestException("rut: " + rut + " fails module 11 ");
+
 		Optional<Student> result = studentRepo.findById(rut);
 
 		if (result.isEmpty())
@@ -70,29 +77,36 @@ public class StudentController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 
 	}
-	
+
 	@PostMapping(value = "/students", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE, headers = "Accept=application/json")
 	public ResponseEntity<String> setStudent(@Valid @RequestBody Student student) {
+
+		if (!studentServ.validaModulo11(student.getRut()))
+			throw new BadRequestException("rut: " + student.getRut() + " fails module 11 ");
 
 		Optional<Student> result = studentRepo.findById(student.getRut());
 
 		if (!result.isEmpty())
 			throw new BadRequestException("rut: " + student.getRut() + " existe previamente");
-		
+
 		Optional<Course> course = courseRepo.findById(student.getCourse().getCode());
-		
-		if(course.isEmpty())
+
+		if (course.isEmpty())
 			throw new NotFoundException("course.code: " + student.getCourse().getCode() + " not found ");
 
 		student.setCourse(course.get());
 		studentRepo.save(student);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
-	
+
 	@PutMapping(value = "/students/{rut}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE, headers = "Accept=application/json")
-	public ResponseEntity<String> updateStudent(
-			@Valid @PathVariable("rut") @Pattern(regexp = expRexRUT) String rut,
+	public ResponseEntity<String> updateStudent(@Valid @PathVariable("rut") @Pattern(regexp = expRexRUT) String rut,
 			@Valid @RequestBody Student student) {
+
+		if (!studentServ.validaModulo11(rut))
+			throw new BadRequestException("rut: " + rut + " fails module 11 ");
+
+		student.setRut(rut);
 
 		Optional<Student> result = studentRepo.findById(rut);
 
@@ -100,10 +114,10 @@ public class StudentController {
 			throw new NotFoundException("rut: " + rut + " not found");
 
 		Optional<Course> course = courseRepo.findById(student.getCourse().getCode());
-		
-		if(course.isEmpty())
+
+		if (course.isEmpty())
 			throw new NotFoundException("course.code: " + student.getCourse().getCode() + " not found ");
-		
+
 		Student stud = result.get();
 		stud.setName(student.getName());
 		stud.setLastName(student.getLastName());
@@ -113,10 +127,12 @@ public class StudentController {
 		studentRepo.save(stud);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
+
 	@DeleteMapping(value = "/students/{rut}", headers = "Accept=application/json")
-	public ResponseEntity<String> deleteCourse(
-			@Valid @PathVariable("rut") @Pattern(regexp = expRexRUT) String rut) {
+	public ResponseEntity<String> deleteCourse(@Valid @PathVariable("rut") @Pattern(regexp = expRexRUT) String rut) {
+
+		if (!studentServ.validaModulo11(rut))
+			throw new BadRequestException("rut: " + rut + " fails module 11 ");
 
 		Optional<Student> result = studentRepo.findById(rut);
 

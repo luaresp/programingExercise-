@@ -215,6 +215,28 @@ public class StudentControllerTest {
 
 	}
 	
+	@Test
+	public void deleteStudents() throws Exception {
+		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/token").accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON_VALUE)).andExpect(status().isOk()).andReturn();
+
+		String actualResponseBody = mvcResult.getResponse().getContentAsString();
+		JwtResponse response = mapper.readValue(actualResponseBody, JwtResponse.class);
+		String token = response.getJwttoken();
+		
+		mockMvc.perform(MockMvcRequestBuilders.delete("/students/{rut}", "55555555-5").accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Bearer " + token)).andExpect(status().isOk());
+		
+		mockMvc.perform(MockMvcRequestBuilders.delete("/students/{rut}", "22222222-2").accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Bearer " + token)).andExpect(status().isNotFound());
+		
+		mockMvc.perform(MockMvcRequestBuilders.delete("/students/{rut}", "22222222").accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Bearer " + token)).andExpect(status().isBadRequest());
+		
+		mockMvc.perform(MockMvcRequestBuilders.delete("/students/{rut}", "222.222.22-2").accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Bearer " + token)).andExpect(status().isBadRequest());
+		
+	}
 	
 
 }
